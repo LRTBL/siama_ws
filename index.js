@@ -51,18 +51,18 @@ const getUsersAndEmit = (socket, jwt) => {
 const getDniAndEmit = (socket, data) => {
   console.log(data);
 
-  // axios
-  //   .get(`https://siama-node-js.herokuapp.com/v1/api/user/dni/${data.dni}`, {
-  //     headers: {
-  //       Authorization: data.jwt,
-  //     },
-  //   })
-  //   .then((result) => {
-  //     socket.emit("recibeUserDni", result.data);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+  axios
+    .get(`https://siama-node-js.herokuapp.com/v1/api/user/dni/${data.user}`, {
+      headers: {
+        Authorization: data.jwt,
+      },
+    })
+    .then((result) => {
+      socket.emit("recibeUserDni", result.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 server.listen(PORT, () => {
