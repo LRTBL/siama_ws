@@ -14,11 +14,18 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("New client connected " + socket.id);
 
+  socket.on("notification", (jwt, dni) => {
+    if (interval) {
+      clearInterval(interval);
+    }
+    interval = setInterval(() => getDniAndEmit(dni, jwt), 1000);
+  });
+
   socket.on("getUsers", (jwt) => {
     if (interval) {
       clearInterval(interval);
     }
-    interval = setInterval(() => getApiAndEmit(socket, jwt), 1000);
+    interval = setInterval(() => getUsersAndEmit(socket, jwt), 1000);
   });
   socket.on("disconnect", () => {
     console.log("Client disconnected");
@@ -26,7 +33,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const getApiAndEmit = (socket, jwt) => {
+const getUsersAndEmit = (socket, jwt) => {
   axios
     .get("https://siama-node-js.herokuapp.com/v1/api/user", {
       headers: {
@@ -35,6 +42,21 @@ const getApiAndEmit = (socket, jwt) => {
     })
     .then((result) => {
       socket.emit("recibeUser", result.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const getDniAndEmit = (dni, jwt) => {
+  axios
+    .get(`https://siama-node-js.herokuapp.com/v1/api/user/dni/${dni}`, {
+      headers: {
+        Authorization: jwt,
+      },
+    })
+    .then((result) => {
+      socket.emit("recibeUserDni", result.data);
     })
     .catch((err) => {
       console.log(err);
