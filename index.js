@@ -14,11 +14,11 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("New client connected " + socket.id);
 
-  socket.on("notification", (jwt, dni) => {
+  socket.on("notification", (data) => {
     if (interval) {
       clearInterval(interval);
     }
-    interval = setInterval(() => getDniAndEmit(dni, jwt), 1000);
+    interval = setInterval(() => getDniAndEmit(socket, data), 1000);
   });
 
   socket.on("getUsers", (jwt) => {
@@ -48,11 +48,13 @@ const getUsersAndEmit = (socket, jwt) => {
     });
 };
 
-const getDniAndEmit = (dni, jwt) => {
+const getDniAndEmit = (socket, data) => {
+  console.log(data);
+
   axios
-    .get(`https://siama-node-js.herokuapp.com/v1/api/user/dni/${dni}`, {
+    .get(`https://siama-node-js.herokuapp.com/v1/api/user/dni/${data.dni}`, {
       headers: {
-        Authorization: jwt,
+        Authorization: data.jwt,
       },
     })
     .then((result) => {
