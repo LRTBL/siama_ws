@@ -15,11 +15,11 @@ io.on("connection", (socket) => {
   console.log("New client connected " + socket.id);
   socket.on("admin", (data) => {
     if (interval) clearInterval(interval);
-    interval = setInterval(() => getter(socket, data, true), 10000);
+    interval = setInterval(() => getter(socket, data, true), 1500);
   });
   socket.on("patient", (data) => {
     if (interval) clearInterval(interval);
-    interval = setInterval(() => getter(socket, data), 10000);
+    interval = setInterval(() => getter(socket, data), 1500);
   });
   socket.on("disconnect", () => {
     console.log("Client disconnected");
