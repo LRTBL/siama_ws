@@ -38,27 +38,35 @@ const getter = async (socket, data, flag = false) => {
 };
 
 const getUsersAndEmit = async (jwt) => {
-  let users = await axios.get(
-    "https://siama-node-js.herokuapp.com/v1/api/user",
-    {
-      headers: {
-        Authorization: jwt,
+  try {
+    let users = await axios.get(
+      "https://siama-node-js.herokuapp.com/v1/api/user",
+      {
+        headers: {
+          Authorization: jwt,
+        },
       },
-    },
-  );
-  return users.data;
+    );
+    return users.data;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const getDniAndEmit = async (data) => {
-  let user = await axios.get(
-    `https://siama-node-js.herokuapp.com/v1/api/user/dni/${data.user}`,
-    {
-      headers: {
-        Authorization: data.jwt,
+  try {
+    let user = await axios.get(
+      `https://siama-node-js.herokuapp.com/v1/api/user/dni/${data.user}`,
+      {
+        headers: {
+          Authorization: data.jwt,
+        },
       },
-    },
-  );
-  return user.data;
+    );
+    return user.data;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 server.listen(PORT, () => {
