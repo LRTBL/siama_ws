@@ -40,7 +40,7 @@ const getter = async (socket, data, flag = false) => {
 const getUsersAndEmit = async (jwt) => {
   try {
     let users = await axios.get(
-      "https://siama-node-js.herokuapp.com/v1/api/user",
+      "https://siamaapi2-mgz4ro726a-ue.a.run.app/v1/api/user",
       {
         headers: {
           Authorization: jwt,
@@ -56,7 +56,7 @@ const getUsersAndEmit = async (jwt) => {
 const getDniAndEmit = async (data) => {
   try {
     let user = await axios.get(
-      `https://siama-node-js.herokuapp.com/v1/api/user/dni/${data.user}`,
+      `https://siamaapi2-mgz4ro726a-ue.a.run.app/v1/api/user/dni/${data.user}`,
       {
         headers: {
           Authorization: data.jwt,
@@ -69,6 +69,6 @@ const getDniAndEmit = async (data) => {
   }
 };
 
-server.listen(PORT, () => {
+server.listen(PORT || 5000, () => {
   console.log(`Servidor escuchando por el puerto ${PORT}`);
 });
