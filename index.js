@@ -18,30 +18,38 @@ io.on("connection", (socket) => {
   socket.on("admin", async (data) => {
     console.log("ME LOGIE COMO MEDICO");
     console.log(socket.id);
-    await axios.patch(
-      `${BASE_URL}/user/${data.userId}`,
-      { socketId: socket.id },
-      {
-        headers: {
-          Authorization: data.jwt,
+    try {
+      await axios.patch(
+        `${BASE_URL}/user/${data.userId}`,
+        { socketId: socket.id },
+        {
+          headers: {
+            Authorization: data.jwt,
+          },
         },
-      },
-    );
+      );
+    } catch (err) {
+      console.log("ERROR MEDICO");
+    }
     if (interval) clearInterval(interval);
     interval = setInterval(() => getter(socket, data, true), 2000);
   });
   socket.on("patient", async (data) => {
     console.log("ME LOGIE COMO PACIENTE");
     console.log(socket.id);
-    await axios.patch(
-      `${BASE_URL}/user/${data.userId}`,
-      { socketId: socket.id },
-      {
-        headers: {
-          Authorization: data.jwt,
+    try {
+      await axios.patch(
+        `${BASE_URL}/user/${data.userId}`,
+        { socketId: socket.id },
+        {
+          headers: {
+            Authorization: data.jwt,
+          },
         },
-      },
-    );
+      );
+    } catch (error) {
+      console.log("ERROR PACIENTE");
+    }
     if (interval) clearInterval(interval);
     interval = setInterval(() => getter(socket, data), 2000);
   });
