@@ -58,17 +58,15 @@ io.on("connection", (socket) => {
             Authorization: data.jwt,
           },
         })
-        .then((res) => {
-          console.log(res);
-          return res;
+        .then(async (receptor) => {
+          console.log(receptor);
+          await axios.post(`${BASE_URL}/messages`, {
+            idPatient: data.role === "patient" ? data.userId : receptor._id,
+            idMedical: data.role === "patient" ? receptor._id : data.userId,
+            message: data.message,
+            send: data.role === "patient" ? 1 : 0,
+          });
         });
-      console.log(receptor);
-      await axios.post(`${BASE_URL}/messages`, {
-        idPatient: data.role === "patient" ? data.userId : receptor._id,
-        idMedical: data.role === "patient" ? receptor._id : data.userId,
-        message: data.message,
-        send: data.role === "patient" ? 1 : 0,
-      });
       if (receptor.socketId) {
         socket.broadcast.to(receptor.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
       }
