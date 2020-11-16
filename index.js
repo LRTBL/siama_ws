@@ -49,6 +49,7 @@ io.on("connection", (socket) => {
       );
     } catch (error) {
       console.log("ERROR PACIENTE");
+      console.log(error);
     }
     if (interval) clearInterval(interval);
     interval = setInterval(() => getter(socket, data), 2000);
