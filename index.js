@@ -50,6 +50,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", async (data) => {
+    console.log(data);
     try {
       let receptor = await axios.get(`${BASE_URL}/user/${data.receptorId}`, {
         headers: {
@@ -67,17 +68,12 @@ io.on("connection", (socket) => {
       }
     } catch (error) {
       console.log("ERROR DE SENDMESSAGE");
+      console.log(error);
     }
   });
 
   socket.on("disconnect", async () => {
     console.log(`Client disconnected ${socket.id}`);
-    try {
-      let user = await axios.get(`${BASE_URL}/user/socket/${socket.id}`);
-      socket.broadcast.emit("userDisconnect", { message: "Se desconecto un usario", idUser: user._id });
-    } catch (err) {
-      console.log("ERROR DE DISCONNECT PRI");
-    }
     try {
       await axios.delete(`${BASE_URL}/user/socket/${socket.id}`);
     } catch (error) {
