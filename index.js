@@ -60,9 +60,10 @@ io.on("connection", (socket) => {
           });
           return receptor.data;
         });
-      console.log(rec.socketId);
       if (rec.socketId) {
-        socket.broadcast.to(rec.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
+        console.log(rec.socketId);
+        console.log("SE ENVIO EL MENSAJE");
+        socket.broadcast.to(rec.socketId).emit("receiveMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
       } else {
         console.log(`el usuario ${rec.name} esta desconectado`);
       }
