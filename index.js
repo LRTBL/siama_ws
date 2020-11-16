@@ -67,7 +67,6 @@ io.on("connection", (socket) => {
       }
     } catch (error) {
       console.log("ERROR DE SENDMESSAGE");
-      console.log(error);
     }
   });
 
@@ -78,13 +77,11 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("userDisconnect", { message: "Se desconecto un usario", idUser: user._id });
     } catch (err) {
       console.log("ERROR DE DISCONNECT PRI");
-      console.log(err);
     }
     try {
       await axios.delete(`${BASE_URL}/user/socket/${socket.id}`);
     } catch (error) {
       console.log("ERROR DE DISCONNECT SEC");
-      console.log(error);
     }
     clearInterval(interval);
   });
