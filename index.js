@@ -16,8 +16,6 @@ io.on("connection", (socket) => {
   console.log("New client connected " + socket.id);
 
   socket.on("admin", async (data) => {
-    console.log("ME LOGIE COMO MEDICO");
-    console.log(socket.id);
     try {
       await axios.patch(
         `${BASE_URL}/user/${data.userId}`,
@@ -35,8 +33,6 @@ io.on("connection", (socket) => {
     interval = setInterval(() => getter(socket, data, true), 2000);
   });
   socket.on("patient", async (data) => {
-    console.log("ME LOGIE COMO PACIENTE");
-    console.log(socket.id);
     try {
       await axios.patch(
         `${BASE_URL}/user/${data.userId}`,
@@ -49,7 +45,6 @@ io.on("connection", (socket) => {
       );
     } catch (error) {
       console.log("ERROR PACIENTE");
-      console.log(error);
     }
     if (interval) clearInterval(interval);
     interval = setInterval(() => getter(socket, data), 2000);
@@ -87,12 +82,12 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {
     console.log(`Client disconnected ${socket.id}`);
+    clearInterval(interval);
     try {
       await axios.delete(`${BASE_URL}/user/socket/${socket.id}`);
     } catch (error) {
       console.log("ERROR DE DISCONNECT SEC");
     }
-    clearInterval(interval);
   });
 });
 
