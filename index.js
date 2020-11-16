@@ -9,7 +9,7 @@ const { getter } = require("./utils");
 let interval;
 
 app.get("/", (req, res) => {
-  res.send({ response: "WebSocket siama" }).status(201);
+  res.send({ response: "WebSocket siama DevOps" }).status(201);
 });
 
 io.on("connection", (socket) => {
