@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const { v4: uuidv4 } = require("uuid");
 const server = require("http").createServer(app);
 const socketio = require("socket.io");
 const axios = require("axios");
@@ -68,10 +69,11 @@ io.on("connection", (socket) => {
           });
           return receptor.data;
         });
+
       if (rec.socketId) {
         console.log(rec.socketId);
         console.log("SE ENVIO EL MENSAJE");
-        socket.to(rec.socketId).emit("receiveMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
+        socket.to(rec.socketId).emit("receiveMessage", { message: data.message, idEmisor: data.userId, date: new Date(), idUnico: uuidv4() });
       } else {
         console.log(`el usuario ${rec.name} esta desconectado`);
       }
