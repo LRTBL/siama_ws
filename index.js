@@ -29,6 +29,12 @@ io.on("connection", (socket) => {
     interval = setInterval(() => getter(socket, data, true), 2000);
   });
 
+  // userId
+  // jwt
+  // receptorId
+  // message
+  // rol
+
   socket.on("patient", async (data) => {
     await axios.get(
       `${BASE_URL}/user/${data.userId}`,
@@ -43,7 +49,7 @@ io.on("connection", (socket) => {
     interval = setInterval(() => getter(socket, data), 2000);
   });
 
-  socket.on("sendMessagePatient", async (data) => {
+  socket.on("sendMessage", async (data) => {
     let receptor = await axios.get(`${BASE_URL}/user/${data.receptorId}`, {
       headers: {
         Authorization: data.jwt,
@@ -55,12 +61,17 @@ io.on("connection", (socket) => {
       message: data.message,
       send: data.rol === "patient" ? 1 : 0,
     });
-    socket.broadcast.to(receptor.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId });
+    socket.broadcast.to(receptor.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
   });
 
   socket.on("disconnect", async () => {
     console.log(`Client disconnected ${socket.id}`);
-    socket.broadcast.emit("user_disconnect", { message: "Se desconecto un usario", idUser: socket.id });
+    try {
+      let user = await axios.get(`${BASE_URL}/user/socket/${socket.id}`);
+      socket.broadcast.emit("userDisconnect", { message: "Se desconecto un usario", idUser: user._id });
+    } catch (err) {
+      console.log(err);
+    }
     try {
       await axios.delete(`${BASE_URL}/user/socket/${socket.id}`);
     } catch (error) {
