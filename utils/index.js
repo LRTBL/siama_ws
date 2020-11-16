@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { BASE_URL } = require("./config");
+const { BASE_URL } = require("../config");
 
 const getter = async (socket, data, flag = false) => {
   const newData = {};
