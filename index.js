@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
       if (rec.socketId) {
         console.log(rec.socketId);
         console.log("SE ENVIO EL MENSAJE");
-        socket.broadcast.to(rec.socketId).emit("receiveMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
+        socket.to(rec.socketId).emit("receiveMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
       } else {
         console.log(`el usuario ${rec.name} esta desconectado`);
       }
