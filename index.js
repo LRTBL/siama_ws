@@ -51,9 +51,8 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", async (data) => {
     console.log(data);
-    let re;
     try {
-      let receptor = await axios
+      let rec = await axios
         .get(`${BASE_URL}/user/${data.receptorId}`, {
           headers: {
             Authorization: data.jwt,
@@ -66,16 +65,11 @@ io.on("connection", (socket) => {
             message: data.message,
             send: data.role === "patient" ? 1 : 0,
           });
-          re = receptor;
-          return receptor;
+          return receptor.data;
         });
-      console.log("---------");
-      console.log(receptor);
-      console.log("---------");
-      console.log(re);
-      console.log("---------");
-      if (receptor.socketId) {
-        socket.broadcast.to(receptor.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
+      console.log(rec.socketId);
+      if (rec.socketId) {
+        socket.broadcast.to(rec.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
       }
     } catch (error) {
       console.log("ERROR DE SENDMESSAGE");
