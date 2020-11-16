@@ -28,15 +28,8 @@ io.on("connection", (socket) => {
     if (interval) clearInterval(interval);
     interval = setInterval(() => getter(socket, data, true), 2000);
   });
-
-  // userId
-  // jwt
-  // receptorId
-  // message
-  // rol
-
   socket.on("patient", async (data) => {
-    await axios.get(
+    await axios.patch(
       `${BASE_URL}/user/${data.userId}`,
       { socketId: socket.id },
       {
