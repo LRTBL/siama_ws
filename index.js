@@ -16,6 +16,8 @@ io.on("connection", (socket) => {
   console.log("New client connected " + socket.id);
 
   socket.on("admin", async (data) => {
+    console.log("ME LOGIE COMO MEDICO");
+    console.log(socket.id);
     await axios.patch(
       `${BASE_URL}/user/${data.userId}`,
       { socketId: socket.id },
@@ -29,6 +31,8 @@ io.on("connection", (socket) => {
     interval = setInterval(() => getter(socket, data, true), 2000);
   });
   socket.on("patient", async (data) => {
+    console.log("ME LOGIE COMO PACIENTE");
+    console.log(socket.id);
     await axios.patch(
       `${BASE_URL}/user/${data.userId}`,
       { socketId: socket.id },
