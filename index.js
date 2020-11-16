@@ -50,18 +50,25 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", async (data) => {
-    let receptor = await axios.get(`${BASE_URL}/user/${data.receptorId}`, {
-      headers: {
-        Authorization: data.jwt,
-      },
-    });
-    await axios.post(`${BASE_URL}/messages`, {
-      idPatient: data.rol === "patient" ? data.userId : receptor._id,
-      idMedical: data.rol === "patient" ? receptor._id : data.userId,
-      message: data.message,
-      send: data.rol === "patient" ? 1 : 0,
-    });
-    socket.broadcast.to(receptor.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
+    try {
+      let receptor = await axios.get(`${BASE_URL}/user/${data.receptorId}`, {
+        headers: {
+          Authorization: data.jwt,
+        },
+      });
+      await axios.post(`${BASE_URL}/messages`, {
+        idPatient: data.rol === "patient" ? data.userId : receptor._id,
+        idMedical: data.rol === "patient" ? receptor._id : data.userId,
+        message: data.message,
+        send: data.rol === "patient" ? 1 : 0,
+      });
+      if (receptor.socketId) {
+        socket.broadcast.to(receptor.socketId).emit("recibeMessage", { message: data.message, idEmisor: data.userId, date: new Date() });
+      }
+    } catch (error) {
+      console.log("ERROR DE SENDMESSAGE");
+      console.log(error);
+    }
   });
 
   socket.on("disconnect", async () => {
@@ -70,11 +77,13 @@ io.on("connection", (socket) => {
       let user = await axios.get(`${BASE_URL}/user/socket/${socket.id}`);
       socket.broadcast.emit("userDisconnect", { message: "Se desconecto un usario", idUser: user._id });
     } catch (err) {
+      console.log("ERROR DE DISCONNECT PRI");
       console.log(err);
     }
     try {
       await axios.delete(`${BASE_URL}/user/socket/${socket.id}`);
     } catch (error) {
+      console.log("ERROR DE DISCONNECT SEC");
       console.log(error);
     }
     clearInterval(interval);
