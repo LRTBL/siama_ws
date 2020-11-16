@@ -52,11 +52,16 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", async (data) => {
     console.log(data);
     try {
-      let receptor = await axios.get(`${BASE_URL}/user/${data.receptorId}`, {
-        headers: {
-          Authorization: data.jwt,
-        },
-      });
+      let receptor = await axios
+        .get(`${BASE_URL}/user/${data.receptorId}`, {
+          headers: {
+            Authorization: data.jwt,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          return res;
+        });
       console.log(receptor);
       await axios.post(`${BASE_URL}/messages`, {
         idPatient: data.role === "patient" ? data.userId : receptor._id,
