@@ -82,6 +82,17 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("leido", async (data) => {
+    let response = await axios.get(`${BASE_URL}/messages/viewed/${data.idEmisor}/${data.idReceptor}/${data.rol}`).then(async (res) => {
+      return res.data;
+    });
+    if (response.socketId) {
+      socket.to(response.socketId).emit("leer", { id: data.idReceptor });
+    } else {
+      console.log(`el usuario ${response.name} esta desconectado`);
+    }
+  });
+
   socket.on("disconnect", async () => {
     console.log(`Client disconnected ${socket.id}`);
     clearInterval(interval);
