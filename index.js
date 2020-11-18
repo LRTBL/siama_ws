@@ -83,10 +83,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leido", async (data) => {
-    let response = await axios.get(`${BASE_URL}/messages/viewed/${data.idEmisor}/${data.idReceptor}/${data.rol}`).then(async (res) => {
+    let response = await axios.get(`${BASE_URL}/messages/viewed/${data.idEmisor}/${data.idReceptor}/${data.rol}`).then((res) => {
+      console.log("RES DATA");
+      console.log(res.data);
       return res.data;
     });
+    console.log("RESPONSE");
+    console.log(response);
     if (response.socketId) {
+      console.log("SE ENVIO LEIDO");
+
       socket.to(response.socketId).emit("leer", { id: data.idReceptor });
     } else {
       console.log(`el usuario ${response.name} esta desconectado`);
