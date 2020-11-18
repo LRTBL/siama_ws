@@ -95,7 +95,7 @@ io.on("connection", (socket) => {
     console.log(response);
     if (response.socketId) {
       console.log("SE ENVIO LEIDO");
-      socket.broadcast.emit("leer", { id: data.idReceptor });
+      socket.to(response.socketId).emit("leer", { id: data.idReceptor });
     } else {
       console.log(`el usuario ${response.name} esta desconectado`);
     }
