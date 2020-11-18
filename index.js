@@ -83,6 +83,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leido", async (data) => {
+    console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+    console.log(data);
+    console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
     let response = await axios.get(`${BASE_URL}/messages/viewed/${data.idEmisor}/${data.idReceptor}/${data.rol}`).then((res) => {
       console.log("RES DATA");
       console.log(res.data);
