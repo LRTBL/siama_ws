@@ -71,8 +71,6 @@ io.on("connection", (socket) => {
         });
 
       if (rec.socketId) {
-        console.log(rec.socketId);
-        console.log("SE ENVIO EL MENSAJE");
         socket.to(rec.socketId).emit("receiveMessage", { message: data.message, idEmisor: data.userId, date: new Date(), idUnico: uuidv4() });
       } else {
         console.log(`el usuario ${rec.name} esta desconectado`);
@@ -83,18 +81,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leido", async (data) => {
-    console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-    console.log(data);
-    console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
     let response = await axios.get(`${BASE_URL}/messages/viewed/${data.idEmisor}/${data.idReceptor}/${data.rol}`).then((res) => {
-      console.log("RES DATA");
-      console.log(res.data);
       return res.data;
     });
-    console.log("RESPONSE");
-    console.log(response);
     if (response.socketId) {
-      console.log("SE ENVIO LEIDO");
       socket.to(response.socketId).emit("leer", { id: data.idReceptor });
     } else {
       console.log(`el usuario ${response.name} esta desconectado`);
